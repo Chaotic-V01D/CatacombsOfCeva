@@ -16,14 +16,62 @@ document.onkeyup = function (e) {
 let player={
   xPos: 0,
   yPos:0,
+  xVel: 0,
+  yVel: 0,
+  maxSpeed: 8,
   width:20,
   height:20,
-  renderDist: 100,
+  renderDist: 275,
+  defCol:"#FF0000",
   src:"",
+  getKeys: function(){
+    if (buttons[38] || buttons[87]) {
+      this.yVel = -this.maxSpeed
+    } else if (buttons[40] || buttons[83]) {
+      this.yVel = this.maxSpeed
+    } else {
+      this.yVel *= 0.9
+    }
+    if (buttons[37] || buttons[65]) {
+      this.xVel = -this.maxSpeed
+    } else if (buttons[39] || buttons[68]) {
+      this.xVel = this.maxSpeed
+    } else {
+      this.xVel *= 0.9;
+    }
+    this.xPos+=this.xVel
+    this.yPos+=this.yVel
+},
   render: function(){
-
+    //console.log("rendering the player")
+    if (!(this.src=="")){
+      //console.log("nonblank src")
+      let img = new Image();
+      img.src = this.src;
+      if (img.complete) {
+        ctx.drawImage(
+          img,
+          (canvas.width / 2 - player.width / 2),
+          (canvas.height / 2 - player.height / 2),
+          this.width,
+          this.height
+        );
+      }
+    }else{
+      //console.log("blank src")
+      ctx.fillStyle=this.defCol
+      ctx.fillRect(
+        (canvas.width / 2 - player.width / 2),
+        (canvas.height / 2 - player.height / 2),
+        this.width,
+        this.height
+      );
+      //console.log(Math.round(player.xPos), Math.round(player.yPos))
+    }
   }
 }
+let entities = []
+entities.push(new Entity(0,0,0,0,"#00FF00", 30, 30, ""))
 function Entity(xPos, yPos, xVel, yVel, defCol, width, height, src){
   this.xPos = xPos
   this.yPos = yPos
@@ -35,23 +83,26 @@ function Entity(xPos, yPos, xVel, yVel, defCol, width, height, src){
   this.src = src
   this.render = function(){
     if (checkEntityDist(player.xPos, player.yPos, this.xPos, this.yPos, this.width, this.height)<player.renderDist){
+      //console.log("rendering")
       if (!(this.src=="")){
-    let img = new Image();
-    img.src = this.src;
-    if (img.complete) {
-      ctx.drawImage(
-        img,
-        0 - player.x + (canvas.width / 2 - player.width / 2),
-        0 - player.y + (canvas.height / 2 - player.height / 2),
-        this.width,
-        this.height
-      );
-    }
-  }else{
-    ctx.fillStyle=this.defCol
-    ctx.fillRect(
-      0 - player.x + (canvas.width / 2 - player.width / 2),
-      0 - player.y + (canvas.height / 2 - player.height / 2),
+        let img = new Image();
+        img.src = this.src;
+        if (img.complete) {
+          ctx.drawImage(
+            img,
+            0 - player.x + (canvas.width / 2 - player.width / 2),
+            0 - player.y + (canvas.height / 2 - player.height / 2),
+            this.width,
+            this.height
+          );
+        }
+      }else{
+        //console.log("rendering entity, within dist, no src")
+        //console.log(player.xPos)
+      ctx.fillStyle=this.defCol
+      ctx.fillRect(
+      this.xPos - player.xPos + (canvas.width / 2 - player.width / 2),
+      this.yPos - player.yPos + (canvas.height / 2 - player.height / 2),
       this.width,
       this.height
     );
@@ -65,3 +116,12 @@ function checkEntityDist(startX, startY, entX, entY, entWidth, entHeight){
   let farY = Math.max(Math.abs(startY-entY), Math.abs(startY-(entY+entHeight)))
   return(Math.max(farX, farY))
 }
+
+function renderCycle(){
+  canvas.width = canvas.width
+  player.getKeys()
+  entities.forEach(e=>e.render())
+  player.render()
+  window.requestAnimationFrame(renderCycle)
+}
+renderCycle()
