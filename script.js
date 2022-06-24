@@ -1,5 +1,6 @@
 const canvas = document.getElementById("gameSpace");
 let canvasDimensions = Math.min(window.innerWidth - 30, window.innerHeight - 30);
+canvasDimensions = 400
 canvas.width = canvasDimensions;
 canvas.height = canvasDimensions;
 var ctx = canvas.getContext("2d");
@@ -128,3 +129,25 @@ renderCycle()
 //TODO:
 //Figure out how to store setting and wall information
 //https://www.w3schools.com/jsref/canvas_getimagedata.asp
+function checkPixelLine(startX, startY, dir, stepSize, range, image){
+  //Okay, so this function is basically going to send out a ray
+  //from a point and check for blank pixels along that ray
+  let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  let checkedPixels=[]
+    const startX = 20
+    const startY = 20
+    const dir = 90
+    for (var i=0;i<50;i++){
+    	checkedPixels.push(imgData.data[4*(startX+(i*Math.sin(degToRad(dir))))+3])
+      //okay, so the way that the image data is stored is just in this big array
+      //I need to access specific index of said array based on:
+      //image width, pointX, pointY, and step length
+      //shouldn't be too bad, but a problem for future me
+    }
+  console.log(checkedPixels)
+  };
+}
+
+function degToRad(value){
+  return value * (Math.PI/180);
+}
