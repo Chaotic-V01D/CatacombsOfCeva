@@ -125,3 +125,5 @@ function renderCycle(){
   window.requestAnimationFrame(renderCycle)
 }
 renderCycle()
+//TODO:
+//Figure out how to store setting and wall information
