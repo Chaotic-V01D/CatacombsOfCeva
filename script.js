@@ -127,3 +127,4 @@ function renderCycle(){
 renderCycle()
 //TODO:
 //Figure out how to store setting and wall information
+//https://www.w3schools.com/jsref/canvas_getimagedata.asp
