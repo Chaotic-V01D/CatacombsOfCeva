@@ -174,3 +174,20 @@ function degToRad(value){
 }
 
 //https://pages.github.com/
+/*function degToRad(val){
+  return val * (Math.PI/180);
+}
+let points = []
+for (var i=0;i<32;i++){
+    points.push(i)
+}
+const width = 4
+const height = points.length/width
+const stepSize = 1
+const dir = 360
+
+let startX = 2
+let startY = 4
+for (var i=0;i<2;i++){
+    console.log(points[width*(startY+(-i*stepSize*Math.sin(degToRad(dir))))+Math.min(width, startX+(i*stepSize*Math.cos(degToRad(dir))))])
+}*/
