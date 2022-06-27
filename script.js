@@ -155,8 +155,10 @@ function checkPixelLine(startX, startY, dir, stepSize, range, image){
     const startX = 20
     const startY = 20
     const dir = 90
-    for (var i=0;i<50;i++){
-    	checkedPixels.push(imgData.data[4*(startX+(i*Math.sin(degToRad(dir))))+3])
+    for (var i=0;i<50;i+4){
+    	checkedPixels.push(imgData.data[canvas.width*(startY+(-i*stepSize*Math.sin(degToRad(dir))))+Math.min(canvas.width, startX+(i*stepSize*Math.cos(degToRad(dir))))+3])
+                              //(points[width*(startY+(-i*stepSize*Math.sin(degToRad(dir))))+Math.min(width, startX+(i*stepSize*Math.cos(degToRad(dir))))])
+    	//checkedPixels.push(imgData.data[4*(startX+(i*Math.sin(degToRad(dir))))+3])
       //okay, so the way that the image data is stored is just in this big array
       //I need to access specific index of said array based on:
       //image width, pointX, pointY, and step length
