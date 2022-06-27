@@ -19,6 +19,10 @@ let player={
   yPos:0,
   xVel: 0,
   yVel: 0,
+  xAcc: 0,
+  yAcc: -0.1635,
+  mass: 20,
+  terminalVelocity: 12,
   maxSpeed: 8,
   width:20,
   height:20,
@@ -26,6 +30,9 @@ let player={
   defCol:"#FF0000",
   src:"",
   getKeys: function(){
+    /*this.xVel+=this.xAcc
+    this.yVel=Math.max(this.yVel+this.yAcc, -Math.abs(this.terminalVelocity))*/
+    //Above section does othing unitl collision detection is completed
     if (buttons[38] || buttons[87]) {
       this.yVel = -this.maxSpeed
     } else if (buttons[40] || buttons[83]) {
@@ -73,16 +80,27 @@ let player={
 }
 let entities = []
 entities.push(new Entity(0,0,0,0,"#00FF00", 30, 30, ""))
-function Entity(xPos, yPos, xVel, yVel, defCol, width, height, src){
+function Entity(xPos, yPos, xVel, yVel, xAcc, yAcc, mass, terminalVelocity, maxSpeed, defCol, width, height, src){
   this.xPos = xPos
   this.yPos = yPos
   this.xVel = xVel
   this.yVel = yVel
+  this.xAcc = xAcc
+  this.yAcc = yAcc
+  this.mass = mass
+  this.terminalVelocity = terminalVelocity
+  this.maxSpeed = maxSpeed
   this.defCol = defCol
   this.width = width
   this.height = height
   this.src = src
   this.render = function(){
+    this.xVel+=this.xAcc
+    this.yVel=Math.max(this.yVel+this.yAcc, -Math.abs(this.terminalVelocity))
+    this.xVel *= 0.9
+    this.yVel *= 0.9
+    this.xPos+=this.xVel
+    this.yPos+=this.yVel
     if (checkEntityDist(player.xPos, player.yPos, this.xPos, this.yPos, this.width, this.height)<player.renderDist){
       //console.log("rendering")
       if (!(this.src=="")){
@@ -143,6 +161,8 @@ function checkPixelLine(startX, startY, dir, stepSize, range, image){
       //I need to access specific index of said array based on:
       //image width, pointX, pointY, and step length
       //shouldn't be too bad, but a problem for future me
+      
+      //6-27: I hate past me
     }
   console.log(checkedPixels)
   };
@@ -151,3 +171,5 @@ function checkPixelLine(startX, startY, dir, stepSize, range, image){
 function degToRad(value){
   return value * (Math.PI/180);
 }
+
+//https://pages.github.com/
