@@ -163,6 +163,7 @@ function checkPixelLine(startX, startY, dir, stepSize, range, image){
       //shouldn't be too bad, but a problem for future me
       
       //6-27: I hate past me
+      //6-27 + 36 minutes: I *really* hate past me
     }
   console.log(checkedPixels)
   };
