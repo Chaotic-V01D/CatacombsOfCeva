@@ -95,14 +95,14 @@ function Entity(xPos, yPos, xVel, yVel, xAcc, yAcc, mass, terminalVelocity, maxS
   this.height = height
   this.src = src
   this.render = function(){
-    this.xVel+=this.xAcc
-    this.yVel=Math.max(this.yVel+this.yAcc, -Math.abs(this.terminalVelocity))
+    console.log(player.xPos, player.yPos)
+    //this.xVel+=this.xAcc
+    //this.yVel=Math.max(this.yVel+this.yAcc, -Math.abs(this.terminalVelocity))
     this.xVel *= 0.9
     this.yVel *= 0.9
     this.xPos+=this.xVel
     this.yPos+=this.yVel
     if (checkEntityDist(player.xPos, player.yPos, this.xPos, this.yPos, this.width, this.height)<player.renderDist){
-      //console.log("rendering")
       if (!(this.src=="")){
         let img = new Image();
         img.src = this.src;
@@ -141,36 +141,45 @@ function renderCycle(){
   player.getKeys()
   entities.forEach(e=>e.render())
   player.render()
+  checkPixelLine(190,190,270,1,50)
   window.requestAnimationFrame(renderCycle)
 }
 renderCycle()
 //TODO:
 //Figure out how to store setting and wall information
 //https://www.w3schools.com/jsref/canvas_getimagedata.asp
-function checkPixelLine(startX, startY, dir, stepSize, range, image){
+function checkPixelLine(startX, startY, dir, stepSize, range){
   //Okay, so this function is basically going to send out a ray
   //from a point and check for blank pixels along that ray
   let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   let checkedPixels=[]
-    const startX = 20
+    /*const startX = 20
     const startY = 20
-    const dir = 90
-    for (var i=0;i<50;i++){
-    	checkedPixels.push(imgData.data[canvas.width*(4*startY+(-i*4*stepSize*Math.sin(degToRad(dir))))+Math.min(canvas.width, 4*startX+(i*4*stepSize*Math.cos(degToRad(dir))))+3])
+    const dir = 90*/
+    for (var i=0;i<range;i++){
+    	checkedPixels.push(imgData.data[canvas.width*(4*startY+(-i*4*stepSize*Math.sin(degToRad(dir))))+ 4*startX+(i*4*stepSize*Math.cos(degToRad(dir)))+3])
+      ctx.fillStyle="#000000"
+      ctx.fillRect((startX+(i*stepSize*Math.cos(degToRad(dir)))),(startY+(-i*stepSize*Math.sin(degToRad(dir)))),1,1)
+
+      //console.log((startX+(i*stepSize*Math.cos(degToRad(dir)))),(startY+(-i*stepSize*Math.sin(degToRad(dir)))))
+
                               //(points[width*(startY+(-i*stepSize*Math.sin(degToRad(dir))))+Math.min(width, startX+(i*stepSize*Math.cos(degToRad(dir))))])
     	//checkedPixels.push(imgData.data[4*(startX+(i*Math.sin(degToRad(dir))))+3])
       //okay, so the way that the image data is stored is just in this big array
       //I need to access specific index of said array based on:
       //image width, pointX, pointY, and step length
       //shouldn't be too bad, but a problem for future me
-      
+
       //6-27: I hate past me
       //6-27 + 36 minutes: I *really* hate past me
-    }
-  console.log(checkedPixels)
+    }/*
+    i=0
+    console.log(canvas.width*(4*startY+(-i*4*stepSize*Math.sin(degToRad(dir))))+Math.min(canvas.width, 4*startX+(i*4*stepSize*Math.cos(degToRad(dir)))))
+console.log(imgData.data[304763])*/
+  //console.log(checkedPixels)
+      //console.log((4*startX+(i*4*stepSize*Math.cos(degToRad(dir))))+0)
+    //console.log(canvas.width*(4*startY+(-0*4*stepSize*Math.sin(degToRad(dir))))+Math.min(canvas.width, 4*startX+(0*4*stepSize*Math.cos(degToRad(dir))))+0+360)
   };
-}
-
 function degToRad(value){
   return value * (Math.PI/180);
 }
